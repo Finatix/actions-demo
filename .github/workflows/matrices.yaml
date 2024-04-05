@@ -1,0 +1,27 @@
+name: Demo Matrices
+run-name: Demonstrate the usage of matrices
+
+on:
+  push:
+    branches: [ 'matrices' ]
+
+jobs:
+  job1:
+    name: Matrix demo
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: true
+      matrix:
+        groups:
+          [
+            'DevOpslerInnen',
+            'BackendlerInnen',
+            'FrontendlerInnen',
+            'InfralerInnen',
+            'Product OwnerInnen',
+            'Scrum MasterInnen',
+            'SonstigeInnen'
+          ]
+    steps:
+      - name: Greet
+        run: echo "Hello ${{ matrix.groups }}!"

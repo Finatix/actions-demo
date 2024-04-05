@@ -80,3 +80,10 @@ Reference the output via:
 
 Note that an undeclared variable, secret or output does not throw an error.
 This can lead to frustrating debugging sessions! :-(
+
+
+## Matrices
+
+A matrix is a list of values on the job level, each of which creates a distinct run-through of the steps defined afterwards.
+It is defined with a `strategy:`, which can also be used to declare the behaviour in a failure case.
+For example, it could be set to cancel all parallel runs upon the first error.
