@@ -47,3 +47,36 @@ There are two further things to take note about:
   Any interaction with the repository code, necessitates a checkout step prior to that.
   Typically this should be done at the beginning of the job.
 * Jobs are being run in parallel unless they are specified to depend on another job by using the `needs:` key at the job’s top level.
+
+
+## Variables, Secrets and Outputs
+
+The `variables_secrets_outputs` branch demonstrates the usage of variables, secrets and outputs.
+Variables and secrets are defined in GitHub repository’s UI under Settings > Secrets and variables > Actions.
+They hold central configuration or other repeatedly used values and can be defined on three levels:
+* Organization
+* Environment
+* Repository
+
+Secrets differ from variables in that they can neither be read from the UI nore the workflow logs.
+They are invoked with the `${{ VARS.<VAR_NAME> }}` and `${{ SECRETS.<SECRET_NAME> }}` syntax respectively.
+
+Outputs can be declared dynamically during a workflow run and fulfill the purpose of sharing reused values between consequtive jobs.
+To declare them, use:
+
+```
+outputs:
+  output_name: ${{ steps.<step_id>.outputs.output_name }}
+```
+
+Assign a value within a step with:
+`echo "my_first_output=$my_first_output" >> "$GITHUB_OUTPUT"`
+
+Make the output available in other jobs, by letting a consequtive job depend on the defining job:
+`needs: job_id`
+
+Reference the output via:
+`${{ needs.job_id.outputs.output_name }}`
+
+Note that an undeclared variable, secret or output does not throw an error.
+This can lead to frustrating debugging sessions! :-(
