@@ -1,0 +1,46 @@
+name: Node Continuous Integration
+run-name: Integration on ${{ github.event.ref }}
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ add_integration ]
+
+jobs:
+  test_pull_request:
+    name: Run Tests and Build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 # This is the latest Checkout action. In previous commits v3 was still specified
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+      - name: Run npm install
+        working-directory: ./src
+        run: npm install
+      - name: Run npm ci
+        working-directory: ./src
+        run: npm ci
+      - name: Run npm test
+        working-directory: ./src
+        run: npm test
+      - name: Run npm build
+        working-directory: ./src
+        run: npm run build
+
+  build_image:
+    name: Build Docker image
+    runs-on: ubuntu-22.04
+    needs: test_pull_request
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Image
+        uses: docker/build-push-action@v5
+        with:
+          context: "{{defaultContext}}:src"
+          push: false
+          tags: node-example:latest

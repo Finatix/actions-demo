@@ -124,3 +124,15 @@ The `tags_and_conditions` workflow introduced in the corresponding branch, also 
 * It evaluates specific context keys to define customized conditions which cannot be produced with the default event specification
 * It uses [expressions](https://docs.github.com/en/actions/learn-github-actions/expressions) to match patterns in the context
 * It explicitly exports a shell variable to the job runner’s environment in order to use it in another step
+
+
+## Add integration
+
+The `add_integration` branch adds an exemplary project from an codekata, which was meant to be refactored.
+So, do not mind the bad code quality.
+
+The project is merely used as a code base to run automated tests against.
+This is what is done in the corresponding workflow file.
+
+It checks out the code base, sets up node and runs `npm install`, `npm ci`, `npm test`, `npm build`.
+Additionally, it builds the Docker image without pushing it.
