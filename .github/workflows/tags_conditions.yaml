@@ -1,0 +1,49 @@
+name: Demo Tags and Conditions
+run-name: Demonstrate the usage of Commit Tags and Conditional Jobs
+
+on:
+  push:
+    # branches: [ 'tags_and_conditions' ] (this branch rule is evaluated separately from the tags rule leading to duplicated runs)
+    tags:
+      - greet_*
+      - goodbye_*
+
+jobs:
+  debug:
+    name: Debug Job
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Base Ref
+        run: echo ${{ github.event.base_ref }}
+
+  greet:
+    name: Greet by tag
+    runs-on: ubuntu-22.04
+    if: ${{ endsWith(github.event.base_ref, 'tags_and_conditions') && startsWith(github.ref, 'refs/tags/greet') }} # With this check, the branch and tags conditions are basically enforced with an logical AND
+    steps:
+      - name: Extract tag
+        run: |
+          tag_name=$(echo ${{ github.ref }} | sed -E 's/.*(greet|goodbye)_(.*)/\2/')
+          echo "tag_name=$tag_name" >> "$GITHUB_ENV"
+          # This step exports the variable to the runner’s env context and makes it available to other steps
+          # Each steps runs in its own shell, which means that setting variables as usual in shells, is merely scoped to the step itself
+      - name: Greet ${{ ENV.tag_name }}
+        run: echo "Hello $tag_name!"
+
+  goodbye:
+    name: Goodbye by tag
+    runs-on: ubuntu-22.04
+    if: ${{ endsWith(github.event.base_ref, 'tags_and_conditions') && startsWith(github.ref, 'refs/tags/goodbye') }} # With this check, the branch and tags conditions are basically enforced with an logical AND
+    steps:
+      - name: Extract tag
+        run: |
+          tag_name=$(echo ${{ github.ref }} | sed -E 's/.*(greet|goodbye)_(.*)/\2/')
+          echo "tag_name=$tag_name" >> "$GITHUB_ENV"
+          # This step exports the variable to the runner’s env context and makes it available to other steps
+          # Each steps runs in its own shell, which means that setting variables as usual in shells, is merely scoped to the step itself
+      - name: Goodbye ${{ ENV.tag_name }}
+        run: echo "Goodbye $tag_name!"

@@ -105,3 +105,22 @@ To log a context to the console during a workflow run, use:
 `${{ fromJSON(<context_name>)}}`.
 The following contexts exist and may be nested in each other:
 `github`, `env`, `vars`, `job`, `jobs`, `steps`, `runner`, `secrets`, `strategy`, `matrix`, `needs`, `inputs`
+
+
+## Tags and Conditional Jobs
+
+GitHub Actions offers the possibility to deactivate single jobs conditionally with the `if:` key.
+This could evaluate information from the contexts or dynamically calculated values from previous jobs within the same workflow run.
+
+These conditions are introduced here alongside with the `tags:` specification on the triggering push event.
+This is simply, to provide a sensible use-case, but is not really related otherwise.
+Tags in Git are simply additional markers for a specific revision.
+The `tags:` key can be used to define valid patterns of tag names.
+The patterns can be described as a limited implementation of regular expressions, i.e., some unusual patterns will not be evaluated correctly.
+
+The `tags_and_conditions` workflow introduced in the corresponding branch, also makes use of some new techniques:
+* It (effectively) runs at most one of two conditional jobs using the `if:` key.
+* It uses the `tags:` event specification to filter for matching tags triggering the workflow
+* It evaluates specific context keys to define customized conditions which cannot be produced with the default event specification
+* It uses [expressions](https://docs.github.com/en/actions/learn-github-actions/expressions) to match patterns in the context
+* It explicitly exports a shell variable to the job runner’s environment in order to use it in another step
