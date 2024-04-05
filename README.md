@@ -87,3 +87,21 @@ This can lead to frustrating debugging sessions! :-(
 A matrix is a list of values on the job level, each of which creates a distinct run-through of the steps defined afterwards.
 It is defined with a `strategy:`, which can also be used to declare the behaviour in a failure case.
 For example, it could be set to cancel all parallel runs upon the first error.
+
+
+## Obtaining Workflow Contexts
+
+GitHub feeds various structured data as contexts into the workflow.
+These are available to different parts of the workflow.
+E.g., the `steps` context is not available outside of a job, while the `github` context can already be accessed at the top when defining the workflow name.
+
+In some cases, looking through this data can help with debugging an issue.
+For example, a variable or secret may have been referenced, leading to an unintended empty variable.
+
+Apart from that, it may just be helpful to get an overview about all available keys.
+Afterall, these can vary depending on the triggering event among others.
+
+To log a context to the console during a workflow run, use:
+`${{ fromJSON(<context_name>)}}`.
+The following contexts exist and may be nested in each other:
+`github`, `env`, `vars`, `job`, `jobs`, `steps`, `runner`, `secrets`, `strategy`, `matrix`, `needs`, `inputs`
