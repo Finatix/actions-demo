@@ -1,0 +1,25 @@
+name: Workflow Call Demo
+run-name: Demonstrate further workflow triggers
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        description: "Name of someone who shall be greeted."
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Name of someone who shall be greeted."
+        required: false
+        type: string
+
+
+jobs:
+  greet:
+    name: Greet Job
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Greet
+        run: echo "Hello ${{ inputs.name }}!"

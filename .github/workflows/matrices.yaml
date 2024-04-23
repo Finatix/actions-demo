@@ -3,7 +3,9 @@ run-name: Demonstrate the usage of matrices
 
 on:
   push:
-    branches: [ 'matrices' ]
+    branches:
+      - 'matrices'
+      - 'workflow_calls'
 
 jobs:
   job1:
@@ -24,4 +26,5 @@ jobs:
           ]
     steps:
       - name: Greet
-        run: echo "Hello ${{ matrix.groups }}!"
+        uses: ./.github/workflows/greet_someone.yaml
+        with: ${{ matrix.groups }}
