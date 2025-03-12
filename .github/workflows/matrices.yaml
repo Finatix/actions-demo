@@ -1,0 +1,30 @@
+name: Demo Matrices
+run-name: Demonstrate the usage of matrices
+
+on:
+  push:
+    branches:
+      - 'matrices'
+      - 'workflow_calls'
+
+jobs:
+  job1:
+    name: Matrix demo
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: true
+      matrix:
+        groups:
+          [
+            'DevOpslerInnen',
+            'BackendlerInnen',
+            'FrontendlerInnen',
+            'InfralerInnen',
+            'Product OwnerInnen',
+            'Scrum MasterInnen',
+            'SonstigeInnen'
+          ]
+    steps:
+      - name: Greet
+        uses: ./.github/workflows/greet_someone.yaml
+        with: ${{ matrix.groups }}
