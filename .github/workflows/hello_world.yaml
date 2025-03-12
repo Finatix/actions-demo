@@ -4,6 +4,8 @@ run-name: Demonstrate a simple GitHub Action
 on:
   push:
     branches: [ 'hello_world', "test-branch" ]
+  pull_request:
+    branches: [ 'hello_world', "test-branch" ]
 
 jobs:
   job1:
@@ -18,6 +20,9 @@ jobs:
 
       - name: Greet
         run: echo "Hello ${{ ENV.name }}!"
+
+      - name: Ref name
+        run: echo "${{ github.ref }}!"
 
   job2:
     name: Job 2
