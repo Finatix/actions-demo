@@ -3,13 +3,13 @@ run-name: Demonstrate a simple GitHub Action
 
 on:
   push:
-    branches: [ 'hello_world' ]
+    branches: [ 'hello_world', "test-branch" ]
 
 jobs:
   job1:
     name: Job 1
     runs-on: ubuntu-22.04
-    environment: TEST
+    environment: "test_2"
     env:
       name: 'World'
     steps:
